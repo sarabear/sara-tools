@@ -33,9 +33,9 @@ public class AliDnsScheduler {
 
     private String lastIpv6;
 
-    @Scheduled(cron = "* */10 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void aliDdnsUpdate(){
-        log.info("每10秒运行一次");
+        log.info("每10分钟运行一次");
         String ipv6 = getLocalIPv6Address();
         if(ipv6 != null && !Objects.equals(ipv6, lastIpv6)){
             log.info("IPV6地址变更，进行地址更新");
