@@ -1,0 +1,6 @@
+- group:
+    code: SYSTEM
+    name: 系统管理
+    permissions:
+      - code: SYSTEM_MANAGEMENT
+        name: 系统管理

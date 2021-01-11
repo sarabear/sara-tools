@@ -1,0 +1,13 @@
+﻿logging:
+  level:
+    org.hibernate.SQL: debug
+    com.idaoben: debug
+    com.idaoben.utils.dto_assembler.MappingClassGenerator: info
+    ControllerMethodLoggingAspect: debug
+
+ali-dns:
+  - access-key-id: LTAI4GDjB1B6oysGL3X4hNGC
+    access-key-secret: S5yZYPtEvGSqoF4EYncnfJnvMDsqf6
+    postfix: ":110"
+    host: "nas6.setsuna.date"
+
