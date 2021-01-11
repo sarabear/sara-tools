@@ -5,17 +5,17 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@ConfigurationProperties(prefix = "")
+@ConfigurationProperties(prefix = "ali-dns")
 @Component
 public class AliDnsConfigs {
 
-    private List<AliDnsConfig> aliDns;
+    private List<AliDnsConfig> records;
 
-    public List<AliDnsConfig> getAliDns() {
-        return aliDns;
+    public List<AliDnsConfig> getRecords() {
+        return records;
     }
 
-    public void setAliDns(List<AliDnsConfig> aliDns) {
-        this.aliDns = aliDns;
+    public void setRecords(List<AliDnsConfig> records) {
+        this.records = records;
     }
 }

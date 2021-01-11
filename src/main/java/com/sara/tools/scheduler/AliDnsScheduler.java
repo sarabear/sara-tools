@@ -33,16 +33,16 @@ public class AliDnsScheduler {
 
     private String lastIpv6;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "${ali-dns.cron}")
     public void aliDdnsUpdate(){
-        log.info("每10分钟运行一次");
+        log.info("DNS更新任务启动");
         String ipv6 = getLocalIPv6Address();
         if(ipv6 != null && !Objects.equals(ipv6, lastIpv6)){
             log.info("IPV6地址变更，进行地址更新");
             //获取会变动的前缀
             String[] split = ipv6.split(":");
             String prefix = String.format("%s:%s:%s:%s:", split[0], split[1], split[2], split[3]);
-            for(AliDnsConfig config : aliDnsConfigs.getAliDns()){
+            for(AliDnsConfig config : aliDnsConfigs.getRecords()){
                 String updateIpv6 = prefix + config.getPostfix();
 
                 String regionId = "cn-hangzhou"; //必填固定值，必须为“cn-hanghou”

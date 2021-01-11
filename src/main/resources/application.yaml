@@ -6,8 +6,13 @@
     ControllerMethodLoggingAspect: debug
 
 ali-dns:
-  - access-key-id: LTAI4GDjB1B6oysGL3X4hNGC
-    access-key-secret: S5yZYPtEvGSqoF4EYncnfJnvMDsqf6
-    postfix: ":110"
-    host: "nas6.setsuna.date"
+  cron: "0/5 * * * * ?"
+  records:
+    - access-key-id: LTAI4GDjB1B6oysGL3X4hNGC
+      access-key-secret: S5yZYPtEvGSqoF4EYncnfJnvMDsqf6
+      postfix: ":110"
+      host: "nas6.setsuna.date"
+
+
+
 
