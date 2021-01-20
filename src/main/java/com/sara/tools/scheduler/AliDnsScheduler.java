@@ -58,9 +58,8 @@ public class AliDnsScheduler {
                     response = client.getAcsResponse(request);
                     List<DescribeSubDomainRecordsResponse.Record> list = response.getDomainRecords();
                     for (DescribeSubDomainRecordsResponse.Record record : list) {
-                        if(Objects.equals(record, updateIpv6)){
+                        if(Objects.equals(record.getValue(), updateIpv6)){
                             log.info("记录没有变化，ipv6: {}", updateIpv6);
-                            lastIpv6 = ipv6;
                         } else {
                             log.info("记录有变化，进行更新，原有ipv6：{}， 新的ipv6： {}", record.getValue(), updateIpv6);
                             UpdateDomainRecordRequest updateRequest = new UpdateDomainRecordRequest();
@@ -69,8 +68,8 @@ public class AliDnsScheduler {
                             updateRequest.setValue(updateIpv6);
                             updateRequest.setType("AAAA");
                             client.getAcsResponse(updateRequest);
-                            lastIpv6 = ipv6;
                         }
+                        lastIpv6 = ipv6;
                     }
                 } catch (ServerException e) {
                     log.error(e.getMessage(), e);
