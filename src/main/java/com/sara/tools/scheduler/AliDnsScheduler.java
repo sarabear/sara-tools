@@ -2,6 +2,7 @@ package com.sara.tools.scheduler;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
+import com.aliyuncs.alidns.model.v20150109.AddDomainRecordRequest;
 import com.aliyuncs.alidns.model.v20150109.DescribeSubDomainRecordsRequest;
 import com.aliyuncs.alidns.model.v20150109.DescribeSubDomainRecordsResponse;
 import com.aliyuncs.alidns.model.v20150109.UpdateDomainRecordRequest;
@@ -57,20 +58,38 @@ public class AliDnsScheduler {
                 try {
                     response = client.getAcsResponse(request);
                     List<DescribeSubDomainRecordsResponse.Record> list = response.getDomainRecords();
+                    DescribeSubDomainRecordsResponse.Record aliyunRecord = null;
                     for (DescribeSubDomainRecordsResponse.Record record : list) {
-                        if(Objects.equals(record.getValue(), updateIpv6)){
+                        if("AAAA".equals(record.getType())){
+                            aliyunRecord = record;
+                            break;
+                        }
+                    }
+                    if(aliyunRecord != null){
+                        if(Objects.equals(aliyunRecord.getValue(), updateIpv6)){
                             log.info("记录没有变化，ipv6: {}", updateIpv6);
                         } else {
-                            log.info("记录有变化，进行更新，原有ipv6：{}， 新的ipv6： {}", record.getValue(), updateIpv6);
+                            log.info("记录有变化，进行更新，原有ipv6：{}， 新的ipv6： {}", aliyunRecord.getValue(), updateIpv6);
                             UpdateDomainRecordRequest updateRequest = new UpdateDomainRecordRequest();
-                            updateRequest.setRecordId(record.getRecordId());
-                            updateRequest.setRR(record.getRR());
+                            updateRequest.setRecordId(aliyunRecord.getRecordId());
+                            updateRequest.setRR(aliyunRecord.getRR());
                             updateRequest.setValue(updateIpv6);
                             updateRequest.setType("AAAA");
                             client.getAcsResponse(updateRequest);
                         }
-                        lastIpv6 = ipv6;
+                    } else {
+                        log.info("没有ipv6记录，开始插入，ipv6: {}", updateIpv6);
+                        int rrIndex = config.getHost().indexOf(".");
+                        String rr = config.getHost().substring(0, rrIndex);
+                        String domainName= config.getHost().substring(rrIndex+1);
+                        AddDomainRecordRequest addRequest = new AddDomainRecordRequest();
+                        addRequest.setRR(rr);
+                        addRequest.setDomainName(domainName);
+                        addRequest.setValue(updateIpv6);
+                        addRequest.setType("AAAA");
+                        client.getAcsResponse(addRequest);
                     }
+                    lastIpv6 = ipv6;
                 } catch (ServerException e) {
                     log.error(e.getMessage(), e);
                 } catch (ClientException e) {
