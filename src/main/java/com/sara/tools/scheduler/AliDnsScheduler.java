@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -34,6 +36,12 @@ public class AliDnsScheduler {
 
     private String lastIpv6;
 
+    @PostConstruct
+    public void init() {
+        //启动后先执行一次
+        aliDdnsUpdate();
+    }
+
     @Scheduled(cron = "${ali-dns.cron}")
     public void aliDdnsUpdate(){
         log.info("DNS更新任务启动");
@@ -44,7 +52,7 @@ public class AliDnsScheduler {
             String[] split = ipv6.split(":");
             String prefix = String.format("%s:%s:%s:%s:", split[0], split[1], split[2], split[3]);
             for(AliDnsConfig config : aliDnsConfigs.getRecords()){
-                String updateIpv6 = prefix + config.getPostfix();
+                String updateIpv6 = StringUtils.isEmpty(config.getPostfix()) ? ipv6 : prefix + config.getPostfix();
 
                 String regionId = "cn-hangzhou"; //必填固定值，必须为“cn-hanghou”
                 IClientProfile profile = DefaultProfile.getProfile(regionId, config.getAccessKeyId(), config.getAccessKeySecret());
@@ -99,7 +107,7 @@ public class AliDnsScheduler {
         }
     }
 
-    public static String getLocalIPv6Address(){
+    private String getLocalIPv6Address(){
         InetAddress inetAddress = null;
         Enumeration<NetworkInterface> networkInterfaces = null;
         try {
