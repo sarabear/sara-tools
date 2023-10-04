@@ -70,23 +70,12 @@
 
     <repositories>
         <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Sonatype Nexus Staging</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <id>public</id>
             <name>Public Release Repositories</name>
-            <url>http://testing.idaoben.com:18090/nexus/content/groups/public</url>
+            <url>https://testing.idaoben.com:1443/repository/maven-aliyun</url>
         </repository>
         <repository>
             <snapshots>
@@ -94,15 +83,7 @@
             </snapshots>
             <id>thirdparty</id>
             <name>Third Party Release Repositories</name>
-            <url>http://testing.idaoben.com:18090/nexus/content/repositories/thirdparty</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>daoben-release</id>
-            <name>Daoben Release Repositories</name>
-            <url>http://testing.idaoben.com:18090/nexus/content/repositories/com.idaoben</url>
+            <url>https://testing.idaoben.com:1443/repository/thirdparty</url>
         </repository>
         <repository>
             <snapshots>
@@ -111,7 +92,7 @@
             </snapshots>
             <id>daoben-snapshot</id>
             <name>Daoben Snapshot Repositories</name>
-            <url>http://testing.idaoben.com:18090/nexus/content/repositories/com.idaoben-snapshots</url>
+            <url>https://testing.idaoben.com:1443/repository/com.idaoben-snapshots</url>
         </repository>
     </repositories>
 
